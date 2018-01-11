@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busyboxerr
+  namespace: default
+spec:
+  containers:
+  - image: busybox
+    command:
+      - exit
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+

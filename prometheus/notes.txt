@@ -1,0 +1,60 @@
+node posting status ready true = 1
+
+kube_node_status_condition{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",condition="Ready",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",node="helm",release="callous-woodpecker",status="true"}	
+
+node out of disk status true = 1
+
+kube_node_status_condition{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",condition="OutOfDisk",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",node="helm",release="callous-woodpecker",status="true"}	
+
+kube_pod_container_status_restarts = value
+
+kube_pod_container_status_restarts{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",container="kubernetes-dashboard",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",namespace="kube-system",pod="kubernetes-dashboard-jgn48",release="callous-woodpecker"}	
+
+
+
+kube_node_labels
+
+kube_node_labels{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",label_beta_kubernetes_io_arch="amd64",label_beta_kubernetes_io_os="linux",label_kubernetes_io_hostname="helm",node="helm",release="callous-woodpecker"}	
+
+kube_node_info
+
+kube_node_info{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",container_runtime_version="docker://Unknown",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kernel_version="4.9.13",kubelet_version="v1.6.4",kubeproxy_version="v1.6.4",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",node="helm",os_image="Buildroot 2017.02",release="callous-woodpecker"}	
+
+kube_pod_status_phase {pod="busybox"}
+count (kube_pod_status_phase)  by (phase)   pending
+kube_pod_status_phase{app="prometheus",chart="prometheus-4.6.10",component="kube-state-metrics",heritage="Tiller",instance="172.17.0.2:8080",job="kubernetes-service-endpoints",kubernetes_name="callous-woodpecker-prometheus-kube-state-metrics",kubernetes_namespace="default",namespace="default",phase="Pending",pod="busybox",release="callous-woodpecker"}	
+
+kube_pod_container_status_waiting_reason    errimagepull
+count (kube_pod_container_status_waiting_reason) by (reason)
+{reason="ErrImagePull"}	
+{reason="ContainerCreating"}	
+
+topk (5, kube_pod_container_status_restarts {namespace="kube-system"})
+
+kube_pod_status_ready {pod="busyboxcrash"} condition is always false
+
+
+docker info
+du -sb /var/lib/docker
+
+
+*/5 * * * * root du -sb /var/log /var/cache/apt /var/lib/prometheus | 
+sed -ne 's/^\([0-9]\+\)\t\(.*\)$/node_directory_size_bytes{directory="\2"} \1/p' > /var/lib/node_exporter/textfile_collector/directory_size.prom.$$ 
+&& mv /var/lib/node_exporter/textfile_collector/directory_size.prom.$$ /var/lib/node_exporter/textfile_collector/directory_size.prom
+
+du -sb /var/lib/docker | sed -ne 's/^\([0-9]\+\)\t\(.*\)$/node_directory_size_bytes{directory="\2"} \1/p'
+
+docker info | sed -ne 's/:/ /; s/ /_/; /System/p' > test
+
+Operating_System  Ubuntu 16.04 LTS
+docker info | sed -ne 's/:/ /; s/ /_/; /Version/p'
+Server_Version  17.09.0-ce
+Kernel_Version  4.4.0-21-generic
+
+docker info | sed -ne 's/:/ /; /Containers/p'Containers  0
+
+sed -e 's/  /$/; s/ //g; s/\$/  /g' test
+
+minikube start --kubernetes-version="v1.6.4" --vm-driver="virtualbox" --v=4 --alsologtostderr --cpus 2 --memory 4096 --profile helm --mount /var/lib/node_exporter/textfile_collector:/var/lib/node_exporter/textfile_collector
+
+

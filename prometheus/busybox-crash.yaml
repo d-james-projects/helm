@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busyboxcrash
+  namespace: default
+spec:
+  containers:
+  - image: busybox
+    command:
+      - sleep
+      - "5"
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+
