@@ -258,7 +258,7 @@ nodeExporter:
   extraHostPathMounts:
     - name: textfile-dir
       mountPath: /srv/textfile_collector
-      hostPath: /Users/67854/tmp
+      hostPath: /hosthome/david/textfile_collector
       readOnly: true
 
   ## Node tolerations for node-exporter scheduling to nodes with taints
