@@ -25,3 +25,39 @@ ALERT HostCPUUtilisation
     description = "High CPU utilisation detected for instance {{ $labels.instance_id }} tagged as: {{ $labels.instance_name_tag }}, the utilisation is currently: {{ $value }}%",
   }
 
+ALERT NodeLost
+  IF kube_node_status_condition {condition="Ready", status="true"} == 0
+  FOR 15m
+  LABELS { severity = "warning" }
+  ANNOTATIONS {
+    summary = "Node not Ready",
+    description = "Node {{ $labels.node }} status not Ready for more than 15 mins.",
+  }
+
+ALERT NodeDiskPressure
+  IF kube_node_status_condition {condition="DiskPressure", status="true"} == 1
+  FOR 5m
+  LABELS { severity = "page" }
+  ANNOTATIONS {
+    summary = "Node showing DiskPressure",
+    description = "Node {{ $labels.node }} showing Disk Pressure.",
+  }
+
+ALERT CrashingApplication
+  IF kube_pod_status_ready {condition="true"} == 0
+  FOR 15m
+
+
+
+ALERT ConainterPullImageError
+  IF kube_pod_container_status_waiting_reason {reason="ErrImagePull"} == 1
+  FOR 1s
+  LABELS { severity = "warning" }
+  ANNOTATIONS {
+    summary = "Container Image pull error",
+    description = "Error pulling image {{ $labels.pod }}.",
+  }
+
+ALERT ContainerRestarts
+  IF kube_pod_container_status_restarts > 50 
+
