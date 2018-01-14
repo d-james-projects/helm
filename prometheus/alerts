@@ -46,6 +46,7 @@ ALERT NodeDiskPressure
 ALERT CrashingApplication
   IF kube_pod_status_ready {condition="true"} == 0
   FOR 15m
+  LABELS
 
 
 
@@ -60,4 +61,9 @@ ALERT ConainterPullImageError
 
 ALERT ContainerRestarts
   IF kube_pod_container_status_restarts > 50 
+  LABELS { severity = "warning" }
+  ANNOTATIONS {
+    summary = "Container restarts > 50",
+    description = "Container restarts high for {{ $labels.pod }} with {{ $value }} restarts.",
+  }
 
