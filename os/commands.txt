@@ -1,0 +1,14 @@
+helm template prom prometheus-community/prometheus -f prom-values.yaml > prom.out
+helm template vmagent vm/victoria-metrics-agent -f vma-values.yaml > vma.out
+helm template vmserver vm/victoria-metrics-single -f vm-values.yaml > vmserver.out
+helm template grafana grafana/grafana -f grafana-values.yaml > grafana.out
+
+oc registry login -z default
+<token> oc whoami -t
+<user> oc whoami
+
+docker login -u <user> -p <token> default-route-openshift-image-registry.apps.sandbox-m2.ll9k.p1.openshiftapps.com
+
+docker push default-route-openshift-image-registry.apps.sandbox-m2.ll9k.p1.openshiftapps.com/<project>/victoria-metrics:latest
+
+
