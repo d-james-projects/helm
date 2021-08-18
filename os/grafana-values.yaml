@@ -69,8 +69,8 @@ livenessProbe:
 # schedulerName: "default-scheduler"
 
 image:
-  repository: grafana/grafana
-  tag: 8.1.0
+  repository: image-registry.openshift-image-registry.svc:5000/devel010417-dev/grafana
+  tag: latest
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -88,10 +88,10 @@ testFramework:
   imagePullPolicy: IfNotPresent
   securityContext: {}
 
-securityContext:
-  runAsUser: 472
-  runAsGroup: 472
-  ufsGroup: 472
+    #securityContext:
+    #runAsUser: 472
+    #runAsGroup: 472
+    #ufsGroup: 472
 
 containerSecurityContext:
   {}
@@ -270,11 +270,11 @@ extraContainerVolumes: []
 ##
 persistence:
   type: pvc
-  enabled: false
+  enabled: true
   # storageClassName: default
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 1Gi
   # annotations: {}
   finalizers:
     - kubernetes.io/pvc-protection

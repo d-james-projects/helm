@@ -56,6 +56,27 @@ data:
     plugins = /var/lib/grafana/plugins
     provisioning = /etc/grafana/provisioning
 ---
+# Source: grafana/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana
+  namespace: devel010417-dev
+  labels:
+    helm.sh/chart: grafana-6.15.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "8.1.0"
+    app.kubernetes.io/managed-by: Helm
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "1Gi"
+---
 # Source: grafana/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -115,15 +136,11 @@ spec:
       
       serviceAccountName: grafana
       automountServiceAccountToken: true
-      securityContext:
-        fsGroup: 472
-        runAsGroup: 472
-        runAsUser: 472
-        ufsGroup: 472
+      initContainers:
       enableServiceLinks: true
       containers:
         - name: grafana
-          image: "grafana/grafana:8.1.0"
+          image: "image-registry.openshift-image-registry.svc:5000/devel010417-dev/grafana:latest"
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: config
@@ -176,4 +193,5 @@ spec:
           configMap:
             name: grafana
         - name: storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: grafana
