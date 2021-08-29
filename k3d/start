@@ -1,0 +1,3 @@
+k3d cluster create mycluster -p "8082:30080@agent[0]" --agents 1
+k3d cluster create -p "8081:80@loadbalancer" --agents 2
+
