@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "job-manager.fullname" . }}-import
+  labels:
+    {{- include "job-manager.labels" . | nindent 4 }}  
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-import"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      containers:
+      - name: manager
+        image: "busybox"
+        command: ["sh", "-c", "date"]
